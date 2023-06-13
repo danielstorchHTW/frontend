@@ -1,34 +1,38 @@
 <template>
-<head>
-</head>
-<div>
-<input v-model="priceField" placeholder="Price" @keyup.enter="save()">
-<button type="button" @click="save()">Save</button>
-<input v-model="filterCrit" placeholder="filter criterion">
-</div>
-<div>
-<table>
-  <thead>
-  <tr>
-    <th>Student ID</th>
-    <th>Name</th>
-    <th>Matrikelnummer</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr v-if="students.length === 0">
-    <td colspan="2">No students yet</td>
-  </tr>
-  <tr v-for="student in students" :key="student.id">
-<!--    <td>{{student.students}}</td>-->
-    <td>{{student.id}}</td>
-    <td>{{student.name}}</td>
-    <td>{{student.matrikelnr}}</td>
-
-  </tr>
-  </tbody>
-</table>
-</div>
+  <head>
+  </head>
+  <div>
+    <input v-model="nameField" placeholder="Name" @keyup.enter="save()">
+    <input v-model="matrikelnrField" placeholder="Matrikelnummer" @keyup.enter="save()">
+    <button type="button" @click="save()">Save</button>
+    <input v-model="filterCrit" placeholder="filter criterion">
+  </div>
+  <div>
+    <table>
+      <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Matrikelnummer</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-if="students.length === 0">
+        <td colspan="2">No students yet</td>
+      </tr>
+      <tr v-for="student in students" :key="student.id">
+        <td>{{student.id}}</td>
+        <td>{{student.name}}</td>
+        <td>{{student.matrikelnr}}</td>
+      </tr>
+      <tr>
+        <td>{{idField}}</td>
+        <td>{{nameField}}</td>
+        <td>{{matrikelnrField}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -41,9 +45,12 @@ export default {
   data () {
     return {
       students: [],
-      studentName: '',
-      matnr: '',
+      idField: '',
+      nameField: '',
+      matrikelnrField: '',
       claims: '',
+      accessToken: '',
+      filterCrit: ''
     }
   },
   methods: {
@@ -69,8 +76,8 @@ export default {
     },
     async save () {
       const data = {
-        name: this.name,
-        matrikelnr: this.matnr,
+        name: this.nameField,
+        matrikelnr: this.matrikelnrField,
       }
       const requestOptions = {
         method: 'POST',
@@ -81,7 +88,7 @@ export default {
         body: JSON.stringify(data)
       }
 
-    // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
+      // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
 
       fetch(endpointUrl, requestOptions)
           .then(response => response.json())
