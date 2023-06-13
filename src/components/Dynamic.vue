@@ -10,8 +10,9 @@
 <table>
   <thead>
   <tr>
-    <th>students</th>
-    <th>matrikelnummer</th>
+    <th>Student ID</th>
+    <th>Name</th>
+    <th>Matrikelnummer</th>
   </tr>
   </thead>
   <tbody>
@@ -20,13 +21,10 @@
   </tr>
   <tr v-for="student in students" :key="student.id">
 <!--    <td>{{student.students}}</td>-->
-    <td>{{student.matrikelnr}}</td>
     <td>{{student.id}}</td>
+    <td>{{student.name}}</td>
+    <td>{{student.matrikelnr}}</td>
 
-  </tr>
-  <tr>
-    <td>{{ name }}</td>
-    <td>{{ matnr }}</td>
   </tr>
   </tbody>
 </table>
