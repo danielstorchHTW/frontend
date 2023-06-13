@@ -19,7 +19,7 @@
     <td colspan="2">No students yet</td>
   </tr>
   <tr v-for="student in students" :key="student.id">
-    <td>{{student.students}}</td>
+<!--    <td>{{student.students}}</td>-->
     <td>{{student.matrikelnr}}</td>
     <td>{{student.id}}</td>
 
@@ -34,6 +34,10 @@
 </template>
 
 <script>
+
+const baseUrl = 'http://localhost:8080';
+const endpointUrl = baseUrl + '/students';
+
 export default {
   name: 'DynamicForm',
   data () {
@@ -51,8 +55,6 @@ export default {
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },
     loadStudents () {
-      const baseUrl = 'http://localhost:8080/students'
-      const endpoint = baseUrl
       const requestOptions = {
         method: 'GET',
         redirect: 'follow'
@@ -60,16 +62,14 @@ export default {
         //   Authorization: 'Bearer ' + this.accessToken
         // }
       }
-      fetch(endpoint, requestOptions)
+      fetch(endpointUrl, requestOptions)
           .then(response => response.json())
           .then(result => result.forEach(student => {
             this.students.push(student)
           }))
           .catch(error => console.log('error', error))
     },
-    save () {
-      const baseUrl = 'http://localhost:8080'
-      const endpoint = baseUrl + '/students'
+    async save () {
       const data = {
         name: this.name,
         matrikelnr: this.matnr,
@@ -82,7 +82,10 @@ export default {
         },
         body: JSON.stringify(data)
       }
-      fetch(endpoint, requestOptions)
+
+    // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
+
+      fetch(endpointUrl, requestOptions)
           .then(response => response.json())
           .then(data => {
             console.log('Success:', data)
