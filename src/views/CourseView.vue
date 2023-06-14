@@ -19,7 +19,7 @@
       <tr v-if="courses.length === 0">
         <td colspan="2">No courses yet</td>
       </tr>
-      <tr v-for="course in courses" :key="course.id">
+      <tr v-for="course in myFilterFunc(filterCrit)" :key="course.id">
         <td>{{course.id}}</td>
         <td>{{course.name}}</td>
       </tr>
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     myFilterFunc (crit) {
-      return this.items.filter(
+      return this.courses.filter(
           it => crit.length < 1 ||
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },

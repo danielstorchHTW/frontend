@@ -6,6 +6,8 @@
     <input v-model="matrikelnrField" placeholder="Matrikelnummer" @keyup.enter="save()">
     <button type="button" @click="save()">Save</button>
     <input v-model="filterCrit" placeholder="filter criterion">
+    <button type="button" @click="myFilterFunc(crit)">suchen</button>
+
   </div>
   <div>
     <table>
@@ -20,13 +22,13 @@
       <tr v-if="students.length === 0">
         <td colspan="2">No students yet</td>
       </tr>
-      <tr v-for="student in students" :key="student.id">
-        <td>{{student.id}}</td>
+      <tr v-for="student in myFilterFunc(filterCrit)" :key="student.id">
+      <td>{{student.id}}</td>
         <td>{{student.name}}</td>
         <td>{{student.matrikelnr}}</td>
       </tr>
       <tr>
-        <td>{{idField}}</td>
+      <td>{{idField}}</td>
         <td>{{nameField}}</td>
         <td>{{matrikelnrField}}</td>
       </tr>
@@ -55,7 +57,7 @@ export default {
   },
   methods: {
     myFilterFunc (crit) {
-      return this.items.filter(
+      return this.students.filter(
           it => crit.length < 1 ||
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },
