@@ -75,6 +75,7 @@ export default {
           }))
           .catch(error => console.log('error', error))
     },
+
     async save () {
       const data = {
         name: this.nameField,

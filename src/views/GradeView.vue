@@ -131,8 +131,6 @@ export default {
         body: JSON.stringify(data)
        }
 
-
-
     // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
 
       fetch(endpointUrl, requestOptions)
