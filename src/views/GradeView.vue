@@ -6,13 +6,14 @@
     <input v-model="course_idField" placeholder="Kurs ID" @keyup.enter="save()">
     <input v-model="gradeField" placeholder="Note" @keyup.enter="save()">
     <button type="button" @click="save()">Save</button>
-    <input v-model="filterCrit" placeholder="filter criterion">
+    <input v-model="filterCritStudent" placeholder="filter Students">
+    <input v-model="filterCritCourse" placeholder="filter Courses">
+
   </div>
   <div>
     <table>
       <thead>
       <tr>
-        <th>Bewertungs ID</th>
         <th>Student ID</th>
         <th>Kurs ID</th>
         <th>Note</th>
@@ -22,14 +23,12 @@
       <tr v-if="studentGrades.length === 0">
         <td colspan="2">No courses yet</td>
       </tr>
-      <tr v-for="studentGrade in studentGrades" :key="studentGrade.id">
-        <td>{{studentGrade.id}}</td>
-        <td>{{studentGrade.student_id}}</td>
-        <td>{{studentGrade.course_id}}</td>
+      <tr v-for="studentGrade in myFilterFuncStudent(filterCritStudent)" :key="studentGrade.id">
+        <td>{{studentGrade.student_id.id}}</td>
+        <td>{{studentGrade.course_id.id}}</td>
         <td>{{studentGrade.grade}}</td>
       </tr>
       <tr>
-        <td>{{idField}}</td>
         <td>{{student_idField}}</td>
         <td>{{course_idField}}</td>
         <td>{{gradeField}}</td>
@@ -57,14 +56,22 @@ export default {
       gradeField: '',
       claims: '',
       accessToken: '',
-      filterCrit: ''
+      filterCritStudent: '',
+      filterCritCourse: ''
     }
   },
   methods: {
-    myFilterFunc (crit) {
-      return this.items.filter(
+    myFilterFuncStudent (crit) {
+      return this.studentGrades.filter(
           it => crit.length < 1 ||
-              it.name.toLowerCase().includes(crit.toLowerCase()))
+              it.student_id.id==crit)
+    },
+
+
+    myFilterFuncCourse (crit) {
+      return this.studentGrades.filter(
+          it => crit.length < 1 ||
+              it.course_id.id==crit)
     },
 
     loadStudents () {
@@ -107,8 +114,9 @@ export default {
     },
 
     async save() {
-      const student = this.students.find(student => student.id === this.student_idField);
-      const course = this.courses.find(course => course.id === this.course_idField);
+      const student = this.students.find(s => s.id == this.student_idField);
+      const course = this.courses.find(c => c.id == this.course_idField);
+
       if (student === undefined || course === undefined) {
         console.log('Student or course not found');
         return;
@@ -128,9 +136,11 @@ export default {
         body: JSON.stringify(data)
        }
 
+
+
     // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
 
-      fetch(baseUrl + '/students', requestOptions)
+      fetch(endpointUrl, requestOptions)
           .then(response => response.json())
           .then(data => {
             console.log('Success:', data)

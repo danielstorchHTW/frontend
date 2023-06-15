@@ -6,7 +6,6 @@
     <input v-model="matrikelnrField" placeholder="Matrikelnummer" @keyup.enter="save()">
     <button type="button" @click="save()">Save</button>
     <input v-model="filterCrit" placeholder="filter criterion">
-    <button type="button" @click="myFilterFunc(crit)">suchen</button>
 
   </div>
   <div>
