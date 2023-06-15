@@ -49,6 +49,8 @@ export default {
   data () {
     return {
       studentGrades: [],
+      students: [],
+      courses: [],
       idField: '',
       student_idField: '',
       course_idField: '',
@@ -64,13 +66,37 @@ export default {
           it => crit.length < 1 ||
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },
+
+    loadStudents () {
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      }
+      fetch(baseUrl + '/students', requestOptions)
+          .then(response => response.json())
+          .then(result => result.forEach(student => {
+            this.students.push(student)
+          }))
+          .catch(error => console.log('error', error))
+    },
+
+    loadCourses () {
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      }
+      fetch(baseUrl + '/course', requestOptions)
+          .then(response => response.json())
+          .then(result => result.forEach(course => {
+            this.courses.push(course)
+          }))
+          .catch(error => console.log('error', error))
+    },
+
     loadGrades () {
       const requestOptions = {
         method: 'GET',
         redirect: 'follow'
-        // headers: {
-        //   Authorization: 'Bearer ' + this.accessToken
-        // }
       }
       fetch(endpointUrl, requestOptions)
           .then(response => response.json())
@@ -79,30 +105,39 @@ export default {
           }))
           .catch(error => console.log('error', error))
     },
-    async save () {
+
+    async save() {
+      const student = this.students.find(student => student.id === this.student_idField);
+      const course = this.courses.find(course => course.id === this.course_idField);
+      if (student === undefined || course === undefined) {
+        console.log('Student or course not found');
+        return;
+      }
+
       const data = {
-        student_id: this.student_idField,
-        course_id: this.course_idField,
+        student_id: student,
+        course_id: course,
         grade: this.gradeField
       }
+
       const requestOptions = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-          // Authorization: 'Bearer ' + this.accessToken
         },
         body: JSON.stringify(data)
-      }
+       }
 
-      // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
+    // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
 
-      fetch(endpointUrl, requestOptions)
+      fetch(baseUrl + '/students', requestOptions)
           .then(response => response.json())
           .then(data => {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
     },
+
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()
@@ -110,12 +145,17 @@ export default {
       }
     }
   },
+
   async created () {
     await this.setup()
-    this.loadGrades()
+    this.loadGrades();
+    this.loadStudents(); // Fetch students data
+    this.loadCourses(); // Fetch courses data
   },
+
   mounted () {
   },
+
   updated() {
     console.log("UPDATED!")
   }
