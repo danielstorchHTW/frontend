@@ -23,7 +23,7 @@
       <tr v-if="studentGrades.length === 0">
         <td colspan="2">No courses yet</td>
       </tr>
-      <tr v-for="studentGrade in myFilterFuncStudent(filterCritStudent)" :key="studentGrade.id">
+      <tr v-for="studentGrade in myFilterFunc(filterCritStudent, filterCritCourse)" :key="studentGrade.id">
         <td>{{studentGrade.student_id.id}}</td>
         <td>{{studentGrade.course_id.id}}</td>
         <td>{{studentGrade.grade}}</td>
@@ -61,17 +61,12 @@ export default {
     }
   },
   methods: {
-    myFilterFuncStudent (crit) {
+    myFilterFunc(critStudent, critCourse) {
       return this.studentGrades.filter(
-          it => crit.length < 1 ||
-              it.student_id.id==crit)
-    },
-
-
-    myFilterFuncCourse (crit) {
-      return this.studentGrades.filter(
-          it => crit.length < 1 ||
-              it.course_id.id==crit)
+          it =>
+              (critStudent.length < 1 || it.student_id.id == critStudent) &&
+              (critCourse.length < 1 || it.course_id.id == critCourse)
+      );
     },
 
     loadStudents () {
