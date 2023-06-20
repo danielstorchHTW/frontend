@@ -142,6 +142,11 @@ table {
   margin-left: auto;
   margin-right: auto;
 }
+button:hover {
+  background-color: #063822; /* Green */
+  color: #fffdfd;
+}
+
 button {
   background-color: #ffffff; /* Green */
   border-style: solid;
@@ -152,5 +157,6 @@ button {
   display: inline-block;
   font-size: 16px;
 }
+
 
 </style>
