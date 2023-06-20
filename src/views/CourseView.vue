@@ -10,6 +10,7 @@
     <table>
       <thead>
       <tr>
+        <th></th>
         <th>Course ID</th>
         <th>Name</th>
 
@@ -20,10 +21,12 @@
         <td colspan="2">No courses yet</td>
       </tr>
       <tr v-for="course in myFilterFunc(filterCrit)" :key="course.id">
+        <td><button type="button" @click="deleteCourse(course.id)">Delete</button></td>
         <td>{{course.id}}</td>
         <td>{{course.name}}</td>
       </tr>
       <tr>
+        <td></td>
         <td>{{idField}}</td>
         <td>{{nameField}}</td>
       </tr>
@@ -91,6 +94,22 @@ export default {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
+    },
+    async deleteCourse(id) {
+
+      const requestOptions = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+      fetch(endpointUrl + '/delete/' + id, requestOptions)
+          .then(response => response.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch(error => console.log('Error:', error));
     },
     async setup () {
       if (this.$root.authenticated) {
