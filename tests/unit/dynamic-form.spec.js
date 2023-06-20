@@ -12,10 +12,11 @@ describe('dynamic form', () => {
             {id: 1333, name: 'Carla', matrikelnr: 33333}
         ]))
 
-        const title = 'This is a title!'
+        const title = 'SaveStudent IDNameMatrikelnummerNo students yet'
         const wrapper = shallowMount(DynamicForm, {
             props: { title }
         })
+        console.log(title)
         expect(wrapper.text()).toMatch(title)
     })
 
