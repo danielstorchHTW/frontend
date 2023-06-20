@@ -14,6 +14,7 @@
     <table>
       <thead>
       <tr>
+        <th></th>
         <th>Student ID</th>
         <th>Kurs ID</th>
         <th>Note</th>
@@ -24,11 +25,13 @@
         <td colspan="2">No courses yet</td>
       </tr>
       <tr v-for="studentGrade in myFilterFunc(filterCritStudent, filterCritCourse)" :key="studentGrade.id">
+        <td><button type="button" @click="deleteGrade(studentGrade.student_id.id, studentGrade.course_id.id)">Delete</button></td>
         <td>{{studentGrade.student_id.id}}</td>
         <td>{{studentGrade.course_id.id}}</td>
         <td>{{studentGrade.grade}}</td>
       </tr>
       <tr>
+        <td></td>
         <td>{{student_idField}}</td>
         <td>{{course_idField}}</td>
         <td>{{gradeField}}</td>
@@ -139,6 +142,23 @@ export default {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
+    },
+
+    async deleteGrade(student_id, course_id) {
+
+      const requestOptions = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+      fetch(endpointUrl + '/delete/' + student_id + '/' + course_id, requestOptions)
+          .then(response => response.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch(error => console.log('Error:', error));
     },
 
     async setup () {
