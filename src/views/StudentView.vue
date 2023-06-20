@@ -12,6 +12,7 @@
     <table>
       <thead>
       <tr>
+        <th></th>
         <th>Student ID</th>
         <th>Name</th>
         <th>Matrikelnummer</th>
@@ -22,7 +23,8 @@
         <td colspan="2">No students yet</td>
       </tr>
       <tr v-for="student in myFilterFunc(filterCrit)" :key="student.id">
-      <td>{{student.id}}</td>
+        <td><button type="button" @click="deleteStudent(student.id)">Delete</button></td>
+        <td>{{student.id}}</td>
         <td>{{student.name}}</td>
         <td>{{student.matrikelnr}}</td>
       </tr>
@@ -99,6 +101,23 @@ export default {
           })
           .catch(error => console.log('error', error))
     },
+
+    async deleteStudent(id) {
+
+      const requestOptions = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+      fetch(endpointUrl + '/delete/' + id, requestOptions)
+          .then(response => response.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch(error => console.log('Error:', error));
+    },
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()
@@ -124,6 +143,14 @@ table {
   margin-right: auto;
 }
 button {
-  color: blue;
+  background-color: #ffffff; /* Green */
+  border-style: solid;
+  border-spacing: 1px;
+  color: #000000;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
+
 </style>
