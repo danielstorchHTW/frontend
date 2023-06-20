@@ -1,12 +1,11 @@
 <template>
   <head>
   </head>
-  <div>
+  <div class="container">
     <input v-model="nameField" placeholder="Name" @keyup.enter="save()">
     <input v-model="matrikelnrField" placeholder="Matrikelnummer" @keyup.enter="save()">
-    <button type="button" @click="save()">Save</button>
+    <button type="button" class="styled-button" @click="save()">Save</button>
     <input v-model="filterCrit" placeholder="filter criterion">
-
   </div>
   <div>
     <table>
@@ -147,6 +146,11 @@ button:hover {
   color: #fffdfd;
 }
 
+button.styled-button:hover {
+  background-color: #063822; /* Green */
+  color: #fffdfd;
+}
+
 button {
   background-color: #ffffff; /* Green */
   border-style: solid;
@@ -158,5 +162,41 @@ button {
   font-size: 16px;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0px;
+}
+
+
+button {
+  background-color: #ffffff;
+  border-style: solid;
+  border-spacing: 1px;
+  color: #000000;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+input, button.styled-button {
+  background-color: #ffffff;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000000;
+  color: #000000;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+button.styled-button {
+  cursor: pointer; /* Add a cursor pointer when hovering over the button */
+}
 
 </style>
