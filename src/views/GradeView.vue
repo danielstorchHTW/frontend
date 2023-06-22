@@ -10,8 +10,8 @@
     <input v-model="filterCritCourse" placeholder="filter Courses">
 
   </div>
-  <div>
-    <table>
+  <div class ="table-container">
+    <table class ="showGrades">
       <thead>
       <tr>
         <th></th>
@@ -35,6 +35,45 @@
         <td>{{student_idField}}</td>
         <td>{{course_idField}}</td>
         <td>{{gradeField}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class = "showCourses">
+      <thead>
+      <h3>Courses:</h3>
+
+      <tr>
+        <th>Course ID</th>
+        <th>Name</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-if="courses.length === 0">
+        <td colspan="2">No courses yet</td>
+      </tr>
+      <tr v-for="course in courses" :key="course.id">
+        <td>{{course.id}}</td>
+        <td>{{course.name}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class = "showStudents">
+      <thead>
+      <h3>Students:</h3>
+      <tr>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Matrikelnummer</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-if="students.length === 0">
+        <td colspan="2">No students yet</td>
+      </tr>
+      <tr v-for="student in students" :key="student.id">
+        <td>{{student.id}}</td>
+        <td>{{student.name}}</td>
+        <td>{{student.matrikelnr}}</td>
       </tr>
       </tbody>
     </table>
@@ -247,6 +286,23 @@ input, button.styled-button {
 button.styled-button {
   cursor: pointer; /* Add a cursor pointer when hovering over the button */
 }
+.showGrades{
+  float: none;
+  width: 33.33%;
+}
 
+.showCourses{
+  float: right;
+  margin-right: 10px;
+}
+
+.showStudents{
+  float: left;
+  margin-right: 10px;
+
+.table-container {
+  clear: both;
+}
+}
 </style>
 
