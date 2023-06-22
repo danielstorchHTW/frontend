@@ -94,6 +94,7 @@ export default {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
+      location.reload();
     },
     async deleteCourse(id) {
 
