@@ -2,5 +2,7 @@ module.exports = {
   devServer: {
     port: '3000'
   },
-  publicPath: '/frontend/'
+  publicPath: process.env.NODE_ENV === 'production'
+      ? '/frontend/'
+      : '/'
 }
