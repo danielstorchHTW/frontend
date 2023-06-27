@@ -82,7 +82,7 @@
 
 <script>
 
-const baseUrl = 'http://localhost:8080';
+const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL;
 const endpointUrl = baseUrl + '/grades';
 
 export default {
