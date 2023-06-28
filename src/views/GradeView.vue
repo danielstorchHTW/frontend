@@ -15,7 +15,7 @@
   <div class ="table-container">
     <table class ="showGrades">
       <thead>
-      <h3 style ="text-align: center">Grades:</h3>
+
       <tr>
         <th></th>
         <th>Student ID</th>
