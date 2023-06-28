@@ -314,6 +314,7 @@ button.styled-button {
    padding: 12px 16px;
    font-size: 16px;
    cursor: pointer;
+   border-radius: 10px;
  }
 
 /* Darker background on mouse-over */
