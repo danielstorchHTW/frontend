@@ -1,3 +1,6 @@
+# deployed: https://danielstorchhtw.github.io/frontend/
+
+
 # vue-frontend
 
 ## Project setup
