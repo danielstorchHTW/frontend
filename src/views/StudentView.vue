@@ -148,6 +148,11 @@ export default {
 table {
   margin-left: auto;
   margin-right: auto;
+  border: 2px solid #28865b;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding-right: 30px;
+  padding-left: 30px;
 }
 button:hover {
   background-color: #063822; /* Green */

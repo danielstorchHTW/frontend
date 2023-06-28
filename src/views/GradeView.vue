@@ -284,16 +284,27 @@ button.styled-button {
   float: none;
   width: 60%;
   order: 2;
+  margin-left: 400px;
+  margin-right: 400px;
+  border: 2px solid #28865b;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .showCourses{
   width: 20%;
   order: 3;
+  border: 2px solid #539f4b;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .showStudents {
   width: 20%;
   order: 1;
+  border: 2px solid #539f4b;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .table-container {
