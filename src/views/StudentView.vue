@@ -14,10 +14,10 @@
     <table>
       <thead>
       <tr>
-        <th></th>
         <th>Student ID</th>
         <th>Name</th>
         <th>Matrikelnummer</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -25,13 +25,13 @@
         <td colspan="2">No students yet</td>
       </tr>
       <tr v-for="student in myFilterFunc(filterCrit)" :key="student.id">
-        <td><button class="btn"><i class="fa fa-trash" @click="deleteStudent(student.id)" ></i></button></td>
         <td>{{student.id}}</td>
         <td>{{student.name}}</td>
         <td>{{student.matrikelnr}}</td>
+        <td><button class="btn"><i class="fa fa-trash" @click="deleteStudent(student.id)" ></i></button></td>
       </tr>
       <tr>
-      <td>{{idField}}</td>
+        <td>{{idField}}</td>
         <td>{{nameField}}</td>
         <td>{{matrikelnrField}}</td>
       </tr>
@@ -180,6 +180,7 @@ button {
   align-items: center;
   justify-content: center;
   padding: 10px 0px;
+  margin-bottom: 20px;
 }
 
 

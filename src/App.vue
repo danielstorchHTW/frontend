@@ -22,6 +22,8 @@
   background-color: #539f4b;
   text-align: center;
   overflow: hidden;
+  margin-bottom: 20px;
+  padding: 7px;
 }
 
 /* Style the links inside the navigation bar */

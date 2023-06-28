@@ -17,10 +17,10 @@
       <thead>
 
       <tr>
-        <th></th>
         <th>Student ID</th>
         <th>Kurs ID</th>
         <th>Note</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -28,16 +28,16 @@
         <td colspan="2">No courses yet</td>
       </tr>
       <tr v-for="studentGrade in myFilterFunc(filterCritStudent, filterCritCourse)" :key="studentGrade.id">
-        <td><button class="btn"><i class="fa fa-trash" @click="deleteGrade(studentGrade.student_id.id, studentGrade.course_id.id)" ></i></button></td>
         <td>{{studentGrade.student_id.id}}</td>
         <td>{{studentGrade.course_id.id}}</td>
         <td>{{studentGrade.grade}}</td>
+        <td><button class="btn"><i class="fa fa-trash" @click="deleteGrade(studentGrade.student_id.id, studentGrade.course_id.id)" ></i></button></td>
       </tr>
       <tr>
-        <td></td>
         <td>{{student_idField}}</td>
         <td>{{course_idField}}</td>
         <td>{{gradeField}}</td>
+        <td></td>
       </tr>
       </tbody>
     </table>
@@ -249,6 +249,7 @@ button.styled-button:hover {
   align-items: center;
   justify-content: center;
   padding: 10px 0px;
+  margin-bottom: 20px;
 }
 
 
@@ -284,8 +285,8 @@ button.styled-button {
   float: none;
   width: 60%;
   order: 2;
-  margin-left: 400px;
-  margin-right: 400px;
+  margin-left: 50px;
+  margin-right: 50px;
   border: 2px solid #28865b;
   box-sizing: border-box;
   border-radius: 10px;
@@ -297,6 +298,9 @@ button.styled-button {
   border: 2px solid #539f4b;
   box-sizing: border-box;
   border-radius: 10px;
+  margin-right: 400px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 .showStudents {
@@ -305,6 +309,9 @@ button.styled-button {
   border: 2px solid #539f4b;
   box-sizing: border-box;
   border-radius: 10px;
+  margin-left: 400px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 .table-container {
