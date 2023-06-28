@@ -99,7 +99,7 @@ export default {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
-      //location.reload();
+      location.reload();
     },
 
     async deleteStudent(id) {
