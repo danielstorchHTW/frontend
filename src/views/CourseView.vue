@@ -37,6 +37,8 @@
 
 <script>
 
+import {flushPromises} from "@vue/test-utils";
+
 const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL;
 const endpointUrl = baseUrl + '/course';
 
@@ -94,6 +96,7 @@ export default {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
+      await flushPromises();
       location.reload();
     },
     async deleteCourse(id) {
@@ -111,6 +114,8 @@ export default {
             console.log('Success:', data);
           })
           .catch(error => console.log('Error:', error));
+      await flushPromises();
+      location.reload();
     },
     async setup () {
       if (this.$root.authenticated) {
