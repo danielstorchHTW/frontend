@@ -60,7 +60,6 @@
       </tr>
       </tbody>
     </table>
-    <div class = "students-table-container">
     <table class = "showStudents">
       <thead>
       <h3>Students:</h3>
@@ -81,7 +80,6 @@
       </tr>
       </tbody>
     </table>
-  </div>
   </div>
 </template>
 
@@ -284,17 +282,17 @@ button.styled-button {
 }
 .showGrades{
   float: none;
-  width: 33.33%;
+  width: 60%;
   order: 2;
 }
 
 .showCourses{
-  margin-right: 10px;
+  width: 20%;
   order: 3;
 }
 
 .showStudents {
-  margin-right: 10px;
+  width: 20%;
   order: 1;
 }
 
