@@ -12,7 +12,7 @@ describe('dynamic form', () => {
             {id: 1333, name: 'Carla', matrikelnr: 33333}
         ]))
 
-        const title = 'SaveStudent IDNameMatrikelnummerDelete1222Erwin44444Delete1333Carla33333'
+        const title = 'SaveStudent IDNameMatrikelnummer1222Erwin444441333Carla33333'
         const wrapper = shallowMount(DynamicForm, {
             props: { title }
         })
