@@ -210,7 +210,7 @@ button.styled-button {
   background-color: #539f4b;
   border: none;
   color: white;
-  padding: 12px 16px;
+  padding: 6px 9px;
   font-size: 16px;
   cursor: pointer;
   border-radius: 10px;

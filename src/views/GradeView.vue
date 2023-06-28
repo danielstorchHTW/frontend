@@ -11,11 +11,12 @@
     <button type="button" class="styled-button" @click="save()">Save</button>
     <input v-model="filterCritStudent" placeholder="filter Students">
     <input v-model="filterCritCourse" placeholder="filter Courses">
-
   </div>
+
   <div class ="table-container">
     <table class ="showGrades">
       <thead>
+      <h3 style ="text-align: center">Grades:</h3>
       <tr>
         <th></th>
         <th>Student ID</th>
@@ -229,6 +230,7 @@ export default {
 </script>
 
 <style scoped>
+
 table {
   margin-left: auto;
   margin-right: auto;
@@ -241,17 +243,6 @@ button:hover {
 button.styled-button:hover {
   background-color: #063822; /* Green */
   color: #fffdfd;
-}
-
-button {
-  background-color: #ffffff; /* Green */
-  border-style: solid;
-  border-spacing: 1px;
-  color: #000000;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
 }
 
 .container {
@@ -293,31 +284,34 @@ button.styled-button {
 .showGrades{
   float: none;
   width: 33.33%;
+  order: 2;
 }
 
 .showCourses{
-  float: right;
   margin-right: 10px;
+  order: 3;
 }
 
 .showStudents {
-  float: left;
   margin-right: 10px;
+  order: 1;
 }
+
 .table-container {
-  clear: both;
+  display: flex;
 }
- .btn {
+
+.btn {
    background-color: #539f4b;
    border: none;
    color: white;
-   padding: 12px 16px;
+   padding: 6px 9px;
    font-size: 16px;
    cursor: pointer;
    border-radius: 10px;
+  float: right;
  }
 
-/* Darker background on mouse-over */
 .btn:hover {
   background-color: #063822;
 }
