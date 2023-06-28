@@ -12,7 +12,6 @@
     <input v-model="filterCritStudent" placeholder="filter Students">
     <input v-model="filterCritCourse" placeholder="filter Courses">
   </div>
-
   <div class ="table-container">
     <table class ="showGrades">
       <thead>
@@ -61,6 +60,7 @@
       </tr>
       </tbody>
     </table>
+    <div class = "students-table-container">
     <table class = "showStudents">
       <thead>
       <h3>Students:</h3>
@@ -81,6 +81,7 @@
       </tr>
       </tbody>
     </table>
+  </div>
   </div>
 </template>
 
@@ -315,6 +316,9 @@ button.styled-button {
 .btn:hover {
   background-color: #063822;
 }
-
+.students-table-container {
+  float: right;
+  margin-left: 20px;
+}
 </style>
 
