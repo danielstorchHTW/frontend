@@ -1,6 +1,6 @@
 <template>
   <div class="topnav">
-    <a href="frontend" class="navvv">Home</a>
+    <a href="home" class="navvv">Home</a>
     <a href="student" class="navvv">Student</a>
     <a href="course" class="navvv">Course</a>
     <a href="grade" class="navvv">Grade</a>
