@@ -40,7 +40,7 @@
 <script>
 
 const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL;
-const endpointUrl = baseUrl + '/student';
+const endpointUrl = baseUrl + '/students';
 
 export default {
   name: 'DynamicForm',
