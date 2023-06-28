@@ -1,5 +1,8 @@
 <template>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <div class ="container">
     <input v-model="student_idField" placeholder="Student ID" @keyup.enter="save()">
@@ -25,7 +28,7 @@
         <td colspan="2">No courses yet</td>
       </tr>
       <tr v-for="studentGrade in myFilterFunc(filterCritStudent, filterCritCourse)" :key="studentGrade.id">
-        <td><button type="button" @click="deleteGrade(studentGrade.student_id.id, studentGrade.course_id.id)">Delete</button></td>
+        <td><button class="btn"><i class="fa fa-trash" @click="deleteGrade(studentGrade.student_id.id, studentGrade.course_id.id)" ></i></button></td>
         <td>{{studentGrade.student_id.id}}</td>
         <td>{{studentGrade.course_id.id}}</td>
         <td>{{studentGrade.grade}}</td>
@@ -297,13 +300,26 @@ button.styled-button {
   margin-right: 10px;
 }
 
-.showStudents{
+.showStudents {
   float: left;
   margin-right: 10px;
-
+}
 .table-container {
   clear: both;
 }
+ .btn {
+   background-color: #539f4b;
+   border: none;
+   color: white;
+   padding: 12px 16px;
+   font-size: 16px;
+   cursor: pointer;
+ }
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: #063822;
 }
+
 </style>
 
