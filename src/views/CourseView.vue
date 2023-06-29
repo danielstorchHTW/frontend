@@ -13,10 +13,9 @@
     <table>
       <thead>
       <tr>
-        <th></th>
         <th>Course ID</th>
         <th>Name</th>
-
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -24,14 +23,14 @@
         <td colspan="2">No courses yet</td>
       </tr>
       <tr v-for="course in myFilterFunc(filterCrit)" :key="course.id">
-        <td><button class="btn"><i class="fa fa-trash" @click="deleteCourse(course.id)" ></i></button></td>
         <td>{{course.id}}</td>
         <td>{{course.name}}</td>
+        <td><button class="btn"><i class="fa fa-trash" @click="deleteCourse(course.id)" ></i></button></td>
       </tr>
       <tr>
-        <td></td>
         <td>{{idField}}</td>
         <td>{{nameField}}</td>
+        <td></td>
       </tr>
       </tbody>
     </table>
@@ -215,7 +214,8 @@ button.styled-button {
   font-size: 16px;
   cursor: pointer;
   border-radius: 10px;
-
+  float: none;
+  margin-left: 10px;
 }
 
 /* Darker background on mouse-over */

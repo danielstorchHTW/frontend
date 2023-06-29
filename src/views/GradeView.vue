@@ -326,7 +326,6 @@ button.styled-button {
    font-size: 16px;
    cursor: pointer;
    border-radius: 10px;
-  float: right;
  }
 
 .btn:hover {
