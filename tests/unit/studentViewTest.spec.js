@@ -21,5 +21,4 @@ describe('dynamic form', () => {
         expect(wrapper.text()).toMatch(title)
     })
 
-
 })
