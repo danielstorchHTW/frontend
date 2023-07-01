@@ -7,10 +7,9 @@
     <input v-model="filterCritStudent" placeholder="filter Students">
     <input v-model="filterCritCourse" placeholder="filter Courses">
   </div>
-  <div class ="table-container">
-    <table class ="showGrades">
+  <div class="table-container">
+    <table class="showGrades">
       <thead>
-
       <tr>
         <th>Student ID</th>
         <th>Kurs ID</th>
@@ -20,13 +19,17 @@
       </thead>
       <tbody>
       <tr v-if="studentGrades.length === 0">
-        <td colspan="2">No courses yet</td>
+        <td colspan="4">No courses yet</td>
       </tr>
       <tr v-for="studentGrade in myFilterFunc(filterCritStudent, filterCritCourse)" :key="studentGrade.id">
         <td>{{studentGrade.student_id.id}}</td>
         <td>{{studentGrade.course_id.id}}</td>
         <td>{{studentGrade.grade}}</td>
-        <td><button class="btn"><i class="fa fa-trash" @click="deleteGrade(studentGrade.student_id.id, studentGrade.course_id.id)" ></i></button></td>
+        <td>
+          <button class="btn" @click="deleteGrade(studentGrade.student_id.id, studentGrade.course_id.id)">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
       </tr>
       <tr>
         <td>{{student_idField}}</td>
@@ -36,10 +39,8 @@
       </tr>
       </tbody>
     </table>
-    <table class = "showCourses">
+    <table class="showCourses">
       <thead>
-      <h3>Courses:</h3>
-
       <tr>
         <th>Course ID</th>
         <th>Name</th>
@@ -55,9 +56,8 @@
       </tr>
       </tbody>
     </table>
-    <table class = "showStudents">
+    <table class="showStudents">
       <thead>
-      <h3>Students:</h3>
       <tr>
         <th>Student ID</th>
         <th>Name</th>
@@ -66,7 +66,7 @@
       </thead>
       <tbody>
       <tr v-if="students.length === 0">
-        <td colspan="2">No students yet</td>
+        <td colspan="3">No students yet</td>
       </tr>
       <tr v-for="student in students" :key="student.id">
         <td>{{student.id}}</td>
