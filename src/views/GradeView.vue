@@ -110,6 +110,7 @@ export default {
     },
 
     loadStudents () {
+      this.students = [];
       const requestOptions = {
         method: 'GET',
         redirect: 'follow'
@@ -123,6 +124,7 @@ export default {
     },
 
     loadCourses () {
+      this.courses = [];
       const requestOptions = {
         method: 'GET',
         redirect: 'follow'
@@ -135,17 +137,49 @@ export default {
           .catch(error => console.log('error', error))
     },
 
-    loadGrades () {
+    async loadGrades() {
+      this.studentGrades = [];
       const requestOptions = {
         method: 'GET',
         redirect: 'follow'
+      };
+      try {
+        await new Promise((resolve) => {
+          setTimeout(resolve, 800);
+        });
+
+        const response = await fetch(endpointUrl, requestOptions);
+        const result = await response.json();
+        this.studentGrades = result;
+      } catch (error) {
+        console.log('error', error);
       }
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(studentGrade => {
-            this.studentGrades.push(studentGrade)
-          }))
-          .catch(error => console.log('error', error))
+    },
+
+    loadGradesWhenDelete() {
+      this.studentGrades = [];
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      try {
+        // Künstliche Verzögerung von 0,4 Sekunden einführen
+        setTimeout(async () => {
+          const response = await fetch(endpointUrl, requestOptions);
+          const result = await response.json();
+          this.studentGrades = result;
+        }, 400);
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
+
+    resetFields() {
+      this.student_idField = '';
+      this.course_idField = '';
+      this.gradeField = '';
+      this.filterCritStudent = '';
+      this.filterCritCourse = '';
     },
 
     async save() {
@@ -181,7 +215,7 @@ export default {
           .catch(error => console.log('error', error))
    //   location.reload();
       this.resetFields();
-      await this.loadStudents();
+      await this.loadGrades();
     },
 
 
@@ -201,6 +235,7 @@ export default {
             console.log('Success:', data);
           })
           .catch(error => console.log('Error:', error));
+      await this.loadGradesWhenDelete();
     },
 
     async setup () {
