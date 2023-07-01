@@ -99,9 +99,9 @@ export default {
         redirect: 'follow'
       };
       try {
-        // Künstliche Verzögerung von 2 Sekunden einführen
+        // Künstliche Verzögerung von 0,3 Sekunden einführen
         await new Promise((resolve) => {
-          setTimeout(resolve, 400);
+          setTimeout(resolve, 300);
         });
 
         const response = await fetch(endpointUrl, requestOptions);
@@ -134,7 +134,27 @@ export default {
           .catch(error => console.log('Error:', error));
       await flushPromises();
      // location.reload();
+      await this.loadCoursesWhenDelete();
     },
+
+     loadCoursesWhenDelete() {
+      this.students = []; // Zurücksetzen der Studentenliste
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+       try {
+         // Künstliche Verzögerung von 0,4 Sekunden einführen
+         setTimeout(async () => {
+           const response = await fetch(endpointUrl, requestOptions);
+           const result = await response.json();
+           this.students = result;
+         }, 400);
+       } catch (error) {
+         console.log('error', error);
+       }
+    },
+
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()

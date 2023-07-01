@@ -57,25 +57,7 @@ export default {
           it => crit.length < 1 ||
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },
-    loadCourses () {
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-        // headers: {
-        //   Authorization: 'Bearer ' + this.accessToken
-        // }
-      };
-      try {
-        // Künstliche Verzögerung von 2 Sekunden einführen
-        setTimeout(async () => {
-          const response = await fetch(endpointUrl, requestOptions);
-          const result = await response.json();
-          this.courses = result;
-        }, 2000);
-      } catch (error) {
-        console.log('error', error);
-      }
-    },
+
     async save () {
       const data = {
         name: this.nameField,
@@ -103,6 +85,24 @@ export default {
       await this.loadCourses();
     },
 
+    loadCourses() {
+      this.courses = []; // Zurücksetzen der Kursliste
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      try {
+        // Künstliche Verzögerung von 0,3 Sekunden einführen
+        setTimeout(async () => {
+          const response = await fetch(endpointUrl, requestOptions);
+          const result = await response.json();
+          this.courses = result;
+        }, 300);
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
+
     resetFields() {
       this.nameField = '';
       this.filterCrit = '';
@@ -125,7 +125,29 @@ export default {
           .catch(error => console.log('Error:', error));
       await flushPromises();
     //  location.reload();
+      await this.loadCoursesWhenDelete();
     },
+    loadCoursesWhenDelete() {
+      this.courses = []; // Zurücksetzen der Kursliste
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      try {
+        // Künstliche Verzögerung von 0,4 Sekunden einführen
+        setTimeout(async () => {
+          const response = await fetch(endpointUrl, requestOptions);
+          const result = await response.json();
+          this.courses = result;
+        }, 400);
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
+
+
+
+
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()
