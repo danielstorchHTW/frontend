@@ -65,22 +65,6 @@ export default {
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },
 
-    loadStudents () {
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-        // headers: {
-        //   Authorization: 'Bearer ' + this.accessToken
-        // }
-      }
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(student => {
-            this.students.push(student)
-          }))
-          .catch(error => console.log('error', error))
-    },
-
     async save () {
       const data = {
         name: this.nameField,
@@ -103,7 +87,34 @@ export default {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
+      this.resetFields();
+      await this.loadStudents();
+
      // location.reload();
+    },
+    async loadStudents() {
+      this.students = []; // Zurücksetzen der Studentenliste
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      try {
+        // Künstliche Verzögerung von 2 Sekunden einführen
+        await new Promise((resolve) => {
+          setTimeout(resolve, 400);
+        });
+
+        const response = await fetch(endpointUrl, requestOptions);
+        const result = await response.json();
+        this.students = result;
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
+    resetFields() {
+      this.nameField = '';
+      this.matrikelnrField = '';
+      this.filterCrit = '';
     },
 
     async deleteStudent(id) {

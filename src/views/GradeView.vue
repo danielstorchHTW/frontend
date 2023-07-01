@@ -180,7 +180,11 @@ export default {
           })
           .catch(error => console.log('error', error))
    //   location.reload();
+      this.resetFields();
+      await this.loadStudents();
     },
+
+
 
     async deleteGrade(student_id, course_id) {
 

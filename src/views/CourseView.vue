@@ -64,13 +64,17 @@ export default {
         // headers: {
         //   Authorization: 'Bearer ' + this.accessToken
         // }
+      };
+      try {
+        // Künstliche Verzögerung von 2 Sekunden einführen
+        setTimeout(async () => {
+          const response = await fetch(endpointUrl, requestOptions);
+          const result = await response.json();
+          this.courses = result;
+        }, 2000);
+      } catch (error) {
+        console.log('error', error);
       }
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(course => {
-            this.courses.push(course)
-          }))
-          .catch(error => console.log('error', error))
     },
     async save () {
       const data = {
@@ -95,7 +99,15 @@ export default {
           .catch(error => console.log('error', error))
       await flushPromises();
    //   location.reload();
+      this.resetFields();
+      await this.loadCourses();
     },
+
+    resetFields() {
+      this.nameField = '';
+      this.filterCrit = '';
+    },
+
     async deleteCourse(id) {
 
       const requestOptions = {
