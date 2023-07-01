@@ -103,7 +103,7 @@ export default {
             console.log('Success:', data)
           })
           .catch(error => console.log('error', error))
-      location.reload();
+     // location.reload();
     },
 
     async deleteStudent(id) {
@@ -122,7 +122,7 @@ export default {
           })
           .catch(error => console.log('Error:', error));
       await flushPromises();
-      location.reload();
+     // location.reload();
     },
     async setup () {
       if (this.$root.authenticated) {

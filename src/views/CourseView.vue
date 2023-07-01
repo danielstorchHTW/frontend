@@ -94,7 +94,7 @@ export default {
           })
           .catch(error => console.log('error', error))
       await flushPromises();
-      location.reload();
+   //   location.reload();
     },
     async deleteCourse(id) {
 
@@ -112,7 +112,7 @@ export default {
           })
           .catch(error => console.log('Error:', error));
       await flushPromises();
-      location.reload();
+    //  location.reload();
     },
     async setup () {
       if (this.$root.authenticated) {

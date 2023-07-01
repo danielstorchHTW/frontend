@@ -66,15 +66,18 @@
   right: 10px;
   display: flex;
   align-items: center;
+
 }
 
 .dark-mode-button {
-  padding: 8px 16px;
+  padding:8px 16px;
   background-color: #333;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
+
 }
 
 .dark-mode-button:hover {
