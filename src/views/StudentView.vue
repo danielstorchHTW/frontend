@@ -39,8 +39,6 @@
 
 <script>
 
-import {flushPromises} from "@vue/test-utils";
-
 const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL;
 const endpointUrl = baseUrl + '/students';
 
@@ -55,7 +53,6 @@ export default {
       claims: '',
       accessToken: '',
       filterCrit: '',
-      darkMode: false
     }
   },
   methods: {
@@ -65,78 +62,85 @@ export default {
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },
 
-    loadStudents () {
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-        // headers: {
-        //   Authorization: 'Bearer ' + this.accessToken
-        // }
-      }
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(student => {
-            this.students.push(student)
-          }))
-          .catch(error => console.log('error', error))
+    resetFields() {
+      this.nameField = '';
+      this.matrikelnrField = '';
     },
 
-    async save () {
+    async save() {
       const data = {
         name: this.nameField,
-        matrikelnr: this.matrikelnrField
-      }
+        matrikelnr: this.matrikelnrField,
+      };
       const requestOptions = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-          // Authorization: 'Bearer ' + this.accessToken
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+      };
+      try {
+        await this.performDatabaseOperation(endpointUrl, requestOptions);
+        this.resetFields();
+        await this.loadStudents();
+      } catch (error) {
+        console.log('Error:', error);
       }
-
-      // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
-
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data)
-          })
-          .catch(error => console.log('error', error))
-     // location.reload();
     },
 
     async deleteStudent(id) {
-
       const requestOptions = {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
+      };
+      try {
+        const deleteUrl = `${endpointUrl}/delete/${id}`;
+        await this.performDatabaseOperation(deleteUrl, requestOptions);
+        await this.loadStudents();
+      } catch (error) {
+        console.log('Error:', error);
       }
-
-      fetch(endpointUrl + '/delete/' + id, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch(error => console.log('Error:', error));
-      await flushPromises();
-     // location.reload();
     },
+
+    async performDatabaseOperation(url, requestOptions) {
+      return new Promise((resolve, reject) => {
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              resolve();
+            })
+            .catch(error => {
+              console.log('Error:', error);
+              reject(error);
+            });
+      });
+    },
+
+    async loadStudents() {
+      try {
+        const response = await fetch(endpointUrl);
+        const data = await response.json();
+        this.students = data;
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    },
+
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()
-        // this.accessToken = await this.$auth.getAccessToken()
       }
     }
   },
+
   async created () {
     await this.setup()
-    this.loadStudents()
+    await this.loadStudents()
   },
-  mounted () {
-  },
+
   updated() {
     console.log("UPDATED!")
   }

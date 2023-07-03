@@ -135,17 +135,20 @@ export default {
           .catch(error => console.log('error', error))
     },
 
-    loadGrades () {
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
+    async loadGrades () {
+      try {
+        const response = await fetch(endpointUrl);
+        const data = await response.json();
+        this.studentGrades = data;
+      } catch (error) {
+        console.log('Error:', error);
       }
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(studentGrade => {
-            this.studentGrades.push(studentGrade)
-          }))
-          .catch(error => console.log('error', error))
+    },
+
+    resetFields() {
+      this.student_idField = '';
+      this.course_idField = '';
+      this.gradeField = '';
     },
 
     async save() {
@@ -170,16 +173,13 @@ export default {
         },
         body: JSON.stringify(data)
        }
-
-    // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
-
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data)
-          })
-          .catch(error => console.log('error', error))
-   //   location.reload();
+      try {
+        await this.performDatabaseOperation(endpointUrl, requestOptions);
+        this.resetFields();
+        await this.loadGrades();
+      } catch (error) {
+        console.log('Error:', error);
+      }
     },
 
     async deleteGrade(student_id, course_id) {
@@ -190,19 +190,33 @@ export default {
           'Content-Type': 'application/json'
         }
       }
+      try {
+        const deleteUrl = `${endpointUrl}/delete/${student_id}/${course_id}`;
+        await this.performDatabaseOperation(deleteUrl, requestOptions);
+        await this.loadGrades();
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    },
 
-      fetch(endpointUrl + '/delete/' + student_id + '/' + course_id, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch(error => console.log('Error:', error));
+    async performDatabaseOperation(url, requestOptions) {
+      return new Promise((resolve, reject) => {
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              resolve();
+            })
+            .catch(error => {
+              console.log('Error:', error);
+              reject(error);
+            });
+      });
     },
 
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()
-        // this.accessToken = await this.$auth.getAccessToken()
       }
     }
   },
@@ -210,11 +224,8 @@ export default {
   async created () {
     await this.setup()
     this.loadGrades();
-    this.loadStudents(); // Fetch students data
-    this.loadCourses(); // Fetch courses data
-  },
-
-  mounted () {
+    this.loadStudents();
+    this.loadCourses();
   },
 
   updated() {
