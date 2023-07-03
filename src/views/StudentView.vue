@@ -122,8 +122,7 @@ export default {
     async loadStudents() {
       try {
         const response = await fetch(endpointUrl);
-        const data = await response.json();
-        this.students = data;
+        this.students = await response.json();
       } catch (error) {
         console.log('Error:', error);
       }
@@ -182,7 +181,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0px;
+  padding: 10px 0;
   margin-bottom: 20px;
 }
 

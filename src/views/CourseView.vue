@@ -116,8 +116,7 @@ export default {
     async loadCourses() {
       try {
         const response = await fetch(endpointUrl);
-        const data = await response.json();
-        this.courses = data;
+        this.courses = await response.json();
       } catch (error) {
         console.log('Error:', error);
       }
@@ -176,7 +175,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0px;
+  padding: 10px 0;
   margin-bottom: 20px;
 }
 

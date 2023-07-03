@@ -104,8 +104,8 @@ export default {
     myFilterFunc(critStudent, critCourse) {
       return this.studentGrades.filter(
           it =>
-              (critStudent.length < 1 || it.student_id.id == critStudent) &&
-              (critCourse.length < 1 || it.course_id.id == critCourse)
+              (critStudent.length < 1 || it.student_id.id === critStudent) &&
+              (critCourse.length < 1 || it.course_id.id === critCourse)
       );
     },
 
@@ -138,8 +138,8 @@ export default {
     async loadGrades () {
       try {
         const response = await fetch(endpointUrl);
-        const data = await response.json();
-        this.studentGrades = data;
+
+        this.studentGrades = await response.json();
       } catch (error) {
         console.log('Error:', error);
       }
@@ -152,8 +152,8 @@ export default {
     },
 
     async save() {
-      const student = this.students.find(s => s.id == this.student_idField);
-      const course = this.courses.find(c => c.id == this.course_idField);
+      const student = this.students.find(s => s.id === this.student_idField);
+      const course = this.courses.find(c => c.id === this.course_idField);
 
       if (student === undefined || course === undefined) {
         console.log('Student or course not found');
@@ -254,7 +254,7 @@ button.styled-button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0px;
+  padding: 10px 0;
   margin-bottom: 20px;
 }
 
@@ -337,9 +337,6 @@ button.styled-button {
 .btn:hover {
   background-color: #063822;
 }
-.students-table-container {
-  float: right;
-  margin-left: 20px;
-}
+
 </style>
 
