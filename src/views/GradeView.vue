@@ -104,41 +104,32 @@ export default {
     myFilterFunc(critStudent, critCourse) {
       return this.studentGrades.filter(
           it =>
-              (critStudent.length < 1 || it.student_id.id === critStudent) &&
-              (critCourse.length < 1 || it.course_id.id === critCourse)
+              (critStudent.length < 1 || it.student_id.id == critStudent) &&
+              (critCourse.length < 1 || it.course_id.id == critCourse)
       );
     },
 
-    loadStudents () {
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
+    async loadStudents () {
+      try {
+        const response = await fetch(baseUrl + '/students');
+        this.students = await response.json();
+      } catch (error) {
+        console.log('Error:', error);
       }
-      fetch(baseUrl + '/students', requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(student => {
-            this.students.push(student)
-          }))
-          .catch(error => console.log('error', error))
     },
 
-    loadCourses () {
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
+    async loadCourses () {
+      try {
+        const response = await fetch(baseUrl + '/course');
+        this.courses = await response.json();
+      } catch (error) {
+        console.log('Error:', error);
       }
-      fetch(baseUrl + '/course', requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(course => {
-            this.courses.push(course)
-          }))
-          .catch(error => console.log('error', error))
     },
 
     async loadGrades () {
       try {
         const response = await fetch(endpointUrl);
-
         this.studentGrades = await response.json();
       } catch (error) {
         console.log('Error:', error);
@@ -152,20 +143,17 @@ export default {
     },
 
     async save() {
-      const student = this.students.find(s => s.id === this.student_idField);
-      const course = this.courses.find(c => c.id === this.course_idField);
-
+      const student = this.students.find(s => s.id == this.student_idField);
+      const course = this.courses.find(c => c.id == this.course_idField);
       if (student === undefined || course === undefined) {
         console.log('Student or course not found');
         return;
       }
-
       const data = {
         student_id: student,
         course_id: course,
         grade: this.gradeField
       }
-
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -183,7 +171,6 @@ export default {
     },
 
     async deleteGrade(student_id, course_id) {
-
       const requestOptions = {
         method: 'DELETE',
         headers: {
@@ -223,9 +210,9 @@ export default {
 
   async created () {
     await this.setup()
-    this.loadGrades();
-    this.loadStudents();
-    this.loadCourses();
+    await this.loadGrades();
+    await this.loadStudents();
+    await this.loadCourses();
   },
 
   updated() {
