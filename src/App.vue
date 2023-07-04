@@ -7,9 +7,9 @@
   <div class="app-container" id="app" :class="{ 'dark-mode': darkMode }">
     <div class="topnav">
       <a href="/frontend">Home</a>
-      <a href="/student">Student</a>
-      <a href="/course">Course</a>
-      <a href="/grade">Grade</a>
+      <a href="/frontend/student">Student</a>
+      <a href="/frontend/course">Course</a>
+      <a href="/frontend/grade">Grade</a>
     </div>
     <router-view/>
     <div class="dark-mode-button-container">
