@@ -87,7 +87,8 @@ export default {
         this.showPopup('Saving failed. Both fields must be filled.');
         return;
       }
-      if (typeof data.matrikelnrField === 'string') {
+
+      if (typeof this.matrikelnrField === 'string') {
         this.showPopup('Saving failed. Invalid datatype.');
         return;
       }
