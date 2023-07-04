@@ -6,10 +6,10 @@
   </head>
   <div class="app-container" id="app" :class="{ 'dark-mode': darkMode }">
     <div class="topnav">
-      <a href="home" class="navvv">Home</a>
-      <a href="student" class="navvv">Student</a>
-      <a href="course" class="navvv">Course</a>
-      <a href="grade" class="navvv">Grade</a>
+      <a href="/">Home</a>
+      <a href="student">Student</a>
+      <a href="course">Course</a>
+      <a href="grade">Grade</a>
     </div>
     <router-view/>
     <div class="dark-mode-button-container">
@@ -120,7 +120,4 @@ export default {
     }
   }
 };
-</script>
-
-<script setup>
 </script>

@@ -76,6 +76,9 @@
       </tbody>
     </table>
   </div>
+  <div v-if="savingError!==''" class="popup show">
+    <p>{{ savingError }}</p>
+  </div>
 </template>
 
 <script>
@@ -97,7 +100,8 @@ export default {
       claims: '',
       accessToken: '',
       filterCritStudent: '',
-      filterCritCourse: ''
+      filterCritCourse: '',
+      savingError: ''
     }
   },
   methods: {
@@ -142,11 +146,23 @@ export default {
       this.gradeField = '';
     },
 
+    showPopup(message) {
+      this.savingError = message;
+      setTimeout(() => {
+        this.savingError = '';
+      }, 2000);
+    },
+
     async save() {
       const student = this.students.find(s => s.id == this.student_idField);
       const course = this.courses.find(c => c.id == this.course_idField);
+      if (isNaN(this.gradeField)||this.gradeField === '') {
+        this.showPopup('Saving failed. Invalid datatype.');
+        return;
+      }
       if (student === undefined || course === undefined) {
         console.log('Student or course not found');
+        this.showPopup('Saving failed. Student or course not found.');
         return;
       }
       const data = {
@@ -167,6 +183,7 @@ export default {
         await this.loadGrades();
       } catch (error) {
         console.log('Error:', error);
+        this.showPopup('Saving failed. An error occurred.');
       }
     },
 
@@ -228,12 +245,12 @@ table {
   margin-right: auto;
 }
 button:hover {
-  background-color: #063822; /* Green */
+  background-color: #063822;
   color: #fffdfd;
 }
 
 button.styled-button:hover {
-  background-color: #063822; /* Green */
+  background-color: #063822;
   color: #fffdfd;
 }
 
@@ -272,7 +289,7 @@ input, button.styled-button {
 }
 
 button.styled-button {
-  cursor: pointer; /* Add a cursor pointer when hovering over the button */
+  cursor: pointer;
 }
 .showGrades{
   float: none;
@@ -323,6 +340,24 @@ button.styled-button {
 
 .btn:hover {
   background-color: #063822;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #28865b;
+  border: 2px solid #063822;
+  border-radius: 10px;
+  padding: 5px;
+  z-index: 9999;
+  opacity: 0;
+  color: #fff;
+}
+
+.popup.show {
+  opacity: 1;
 }
 
 </style>

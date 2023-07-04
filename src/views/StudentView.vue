@@ -35,6 +35,9 @@
       </table>
     </div>
   </div>
+  <div v-if="savingError!==''" class="popup show">
+    <p>{{ savingError }}</p>
+  </div>
 </template>
 
 <script>
@@ -53,6 +56,7 @@ export default {
       claims: '',
       accessToken: '',
       filterCrit: '',
+      savingError: ''
     }
   },
   methods: {
@@ -67,11 +71,26 @@ export default {
       this.matrikelnrField = '';
     },
 
+    showPopup(message) {
+      this.savingError = message;
+      setTimeout(() => {
+        this.savingError = '';
+      }, 2000);
+    },
+
     async save() {
       const data = {
         name: this.nameField,
         matrikelnr: this.matrikelnrField,
       };
+      if (this.matrikelnrField.trim() === ''||this.nameField.trim() === '') {
+        this.showPopup('Saving failed. Both fields must be filled.');
+        return;
+      }
+      if (typeof data.matrikelnrField === 'string') {
+        this.showPopup('Saving failed. Invalid datatype.');
+        return;
+      }
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -85,6 +104,7 @@ export default {
         await this.loadStudents();
       } catch (error) {
         console.log('Error:', error);
+        this.showPopup('Saving failed. An error occurred.');
       }
     },
 
@@ -157,17 +177,17 @@ table {
   padding-left: 30px;
 }
 button:hover {
-  background-color: #063822; /* Green */
+  background-color: #063822;
   color: #fffdfd;
 }
 
 button.styled-button:hover {
-  background-color: #063822; /* Green */
+  background-color: #063822;
   color: #fffdfd;
 }
 
 button {
-  background-color: #ffffff; /* Green */
+  background-color: #ffffff;
   border-style: solid;
   border-spacing: 1px;
   color: #000000;
@@ -212,7 +232,7 @@ input, button.styled-button {
 }
 
 button.styled-button {
-  cursor: pointer; /* Add a cursor pointer when hovering over the button */
+  cursor: pointer;
 }
 .btn {
   background-color: #539f4b;
@@ -224,8 +244,26 @@ button.styled-button {
   border-radius: 10px;
 }
 
-/* Darker background on mouse-over */
 .btn:hover {
   background-color: #063822;
 }
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #28865b;
+  border: 2px solid #063822;
+  border-radius: 10px;
+  padding: 5px;
+  z-index: 9999;
+  opacity: 0;
+  color: #fff;
+}
+
+.popup.show {
+  opacity: 1;
+}
+
 </style>

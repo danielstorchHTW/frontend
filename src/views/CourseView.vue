@@ -30,6 +30,9 @@
       </tbody>
     </table>
   </div>
+  <div v-if="savingError!==''" class="popup show">
+    <p>{{ savingError }}</p>
+  </div>
 </template>
 
 <script>
@@ -47,6 +50,7 @@ export default {
       claims: '',
       accessToken: '',
       filterCrit: '',
+      savingError: ''
     };
   },
   methods: {
@@ -62,10 +66,21 @@ export default {
       this.nameField = '';
     },
 
+    showPopup(message) {
+      this.savingError = message;
+      setTimeout(() => {
+        this.savingError = '';
+      }, 2000);
+    },
+
     async save() {
       const data = {
         name: this.nameField,
       };
+      if (this.nameField.trim() === '') {
+        this.showPopup('Saving failed. Field must be filled.');
+        return;
+      }
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -79,6 +94,7 @@ export default {
         await this.loadCourses();
       } catch (error) {
         console.log('Error:', error);
+        this.showPopup('Saving failed. An error occurred.');
       }
     },
 
@@ -206,7 +222,7 @@ input, button.styled-button {
 }
 
 button.styled-button {
-  cursor: pointer; /* Add a cursor pointer when hovering over the button */
+  cursor: pointer;
 }
 .btn {
   background-color: #539f4b;
@@ -220,9 +236,26 @@ button.styled-button {
   margin-left: 10px;
 }
 
-/* Darker background on mouse-over */
 .btn:hover {
   background-color: #063822;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #28865b;
+  border: 2px solid #063822;
+  border-radius: 10px;
+  padding: 5px;
+  z-index: 9999;
+  opacity: 0;
+  color: #fff;
+}
+
+.popup.show {
+  opacity: 1;
 }
 </style>
 
