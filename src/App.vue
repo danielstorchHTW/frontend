@@ -6,10 +6,10 @@
   </head>
   <div class="app-container" id="app" :class="{ 'dark-mode': darkMode }">
     <div class="topnav">
-      <a href="/">Home</a>
-      <a href="student">Student</a>
-      <a href="course">Course</a>
-      <a href="grade">Grade</a>
+      <a href="/frontend">Home</a>
+      <a href="/student">Student</a>
+      <a href="/course">Course</a>
+      <a href="/grade">Grade</a>
     </div>
     <router-view/>
     <div class="dark-mode-button-container">
