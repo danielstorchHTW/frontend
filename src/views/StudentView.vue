@@ -39,8 +39,6 @@
 
 <script>
 
-import {flushPromises} from "@vue/test-utils";
-
 const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL;
 const endpointUrl = baseUrl + '/students';
 
@@ -55,7 +53,6 @@ export default {
       claims: '',
       accessToken: '',
       filterCrit: '',
-      darkMode: false
     }
   },
   methods: {
@@ -65,109 +62,84 @@ export default {
               it.name.toLowerCase().includes(crit.toLowerCase()))
     },
 
-    async save () {
-      const data = {
-        name: this.nameField,
-        matrikelnr: this.matrikelnrField
-      }
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-          // Authorization: 'Bearer ' + this.accessToken
-        },
-        body: JSON.stringify(data)
-      }
-
-      // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
-
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data)
-          })
-          .catch(error => console.log('error', error))
-      this.resetFields();
-      await this.loadStudents();
-
-     // location.reload();
-    },
-    async loadStudents() {
-      this.students = []; // Zurücksetzen der Studentenliste
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
-      try {
-        // Künstliche Verzögerung von 0,3 Sekunden einführen
-        await new Promise((resolve) => {
-          setTimeout(resolve, 300);
-        });
-
-        const response = await fetch(endpointUrl, requestOptions);
-        const result = await response.json();
-        this.students = result;
-      } catch (error) {
-        console.log('error', error);
-      }
-    },
     resetFields() {
       this.nameField = '';
       this.matrikelnrField = '';
-      this.filterCrit = '';
+    },
+
+    async save() {
+      const data = {
+        name: this.nameField,
+        matrikelnr: this.matrikelnrField,
+      };
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+      try {
+        await this.performDatabaseOperation(endpointUrl, requestOptions);
+        this.resetFields();
+        await this.loadStudents();
+      } catch (error) {
+        console.log('Error:', error);
+      }
     },
 
     async deleteStudent(id) {
-
       const requestOptions = {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
+      };
+      try {
+        const deleteUrl = `${endpointUrl}/delete/${id}`;
+        await this.performDatabaseOperation(deleteUrl, requestOptions);
+      } catch (error) {
+        console.log('Error:', error);
       }
-
-      fetch(endpointUrl + '/delete/' + id, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch(error => console.log('Error:', error));
-      await flushPromises();
-     // location.reload();
-      await this.loadCoursesWhenDelete();
+      await this.loadStudents();
     },
 
-     loadCoursesWhenDelete() {
-      this.students = []; // Zurücksetzen der Studentenliste
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
-       try {
-         // Künstliche Verzögerung von 0,4 Sekunden einführen
-         setTimeout(async () => {
-           const response = await fetch(endpointUrl, requestOptions);
-           const result = await response.json();
-           this.students = result;
-         }, 400);
-       } catch (error) {
-         console.log('error', error);
-       }
+    async performDatabaseOperation(url, requestOptions) {
+      return new Promise((resolve, reject) => {
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              resolve();
+            })
+            .catch(error => {
+              console.log('Error:', error);
+              reject(error);
+            });
+      });
+    },
+
+    async loadStudents() {
+      try {
+        const response = await fetch(endpointUrl);
+        this.students = await response.json();
+      } catch (error) {
+        console.log('Error:', error);
+      }
     },
 
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()
-        // this.accessToken = await this.$auth.getAccessToken()
       }
     }
   },
+
   async created () {
     await this.setup()
-    this.loadStudents()
+    await this.loadStudents()
   },
-  mounted () {
-  },
+
   updated() {
     console.log("UPDATED!")
   }
@@ -209,7 +181,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0px;
+  padding: 10px 0;
   margin-bottom: 20px;
 }
 

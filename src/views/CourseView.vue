@@ -34,137 +34,110 @@
 
 <script>
 
-import {flushPromises} from "@vue/test-utils";
-
 const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL;
 const endpointUrl = baseUrl + '/course';
 
 export default {
   name: 'DynamicForm',
-  data () {
+  data() {
     return {
       courses: [],
       idField: '',
       nameField: '',
       claims: '',
       accessToken: '',
-      filterCrit: ''
-    }
+      filterCrit: '',
+    };
   },
   methods: {
-    myFilterFunc (crit) {
+    myFilterFunc(crit) {
       return this.courses.filter(
-          it => crit.length < 1 ||
-              it.name.toLowerCase().includes(crit.toLowerCase()))
-    },
-
-    async save () {
-      const data = {
-        name: this.nameField,
-      }
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-          // Authorization: 'Bearer ' + this.accessToken
-        },
-        body: JSON.stringify(data)
-      }
-
-      // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
-
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data)
-          })
-          .catch(error => console.log('error', error))
-      await flushPromises();
-   //   location.reload();
-      this.resetFields();
-      await this.loadCourses();
-    },
-
-    loadCourses() {
-      this.courses = []; // Zurücksetzen der Kursliste
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
-      try {
-        // Künstliche Verzögerung von 0,3 Sekunden einführen
-        setTimeout(async () => {
-          const response = await fetch(endpointUrl, requestOptions);
-          const result = await response.json();
-          this.courses = result;
-        }, 300);
-      } catch (error) {
-        console.log('error', error);
-      }
+          it =>
+              crit.length < 1 ||
+              it.name.toLowerCase().includes(crit.toLowerCase())
+      );
     },
 
     resetFields() {
       this.nameField = '';
-      this.filterCrit = '';
+    },
+
+    async save() {
+      const data = {
+        name: this.nameField,
+      };
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+      try {
+        await this.performDatabaseOperation(endpointUrl, requestOptions);
+        this.resetFields();
+        await this.loadCourses();
+      } catch (error) {
+        console.log('Error:', error);
+      }
     },
 
     async deleteCourse(id) {
-
       const requestOptions = {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-
-      fetch(endpointUrl + '/delete/' + id, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch(error => console.log('Error:', error));
-      await flushPromises();
-    //  location.reload();
-      await this.loadCoursesWhenDelete();
-    },
-    loadCoursesWhenDelete() {
-      this.courses = []; // Zurücksetzen der Kursliste
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
+          'Content-Type': 'application/json',
+        },
       };
       try {
-        // Künstliche Verzögerung von 0,4 Sekunden einführen
-        setTimeout(async () => {
-          const response = await fetch(endpointUrl, requestOptions);
-          const result = await response.json();
-          this.courses = result;
-        }, 400);
+        const deleteUrl = `${endpointUrl}/delete/${id}`;
+        await this.performDatabaseOperation(deleteUrl, requestOptions);
       } catch (error) {
-        console.log('error', error);
+        console.log('Error:', error);
+      }
+      await this.loadCourses();
+    },
+
+    async performDatabaseOperation(url, requestOptions) {
+      return new Promise((resolve, reject) => {
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              resolve();
+            })
+            .catch(error => {
+              console.log('Error:', error);
+              reject(error);
+            });
+      });
+    },
+
+    async loadCourses() {
+      try {
+        const response = await fetch(endpointUrl);
+        this.courses = await response.json();
+      } catch (error) {
+        console.log('Error:', error);
       }
     },
 
-
-
-
-    async setup () {
+    async setup() {
       if (this.$root.authenticated) {
-        this.claims = await this.$auth.getUser()
-        // this.accessToken = await this.$auth.getAccessToken()
+        this.claims = await this.$auth.getUser();
       }
-    }
+    },
   },
-  async created () {
-    await this.setup()
-    this.loadCourses()
+
+  async created() {
+    await this.setup();
+    await this.loadCourses();
   },
-  mounted () {
-  },
+
   updated() {
-    console.log("UPDATED!")
-  }
-}
+    console.log('UPDATED!');
+  },
+};
 </script>
 
 <style>
@@ -202,7 +175,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0px;
+  padding: 10px 0;
   margin-bottom: 20px;
 }
 

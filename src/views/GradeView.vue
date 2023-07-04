@@ -109,68 +109,30 @@ export default {
       );
     },
 
-    loadStudents () {
-      this.students = [];
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      }
-      fetch(baseUrl + '/students', requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(student => {
-            this.students.push(student)
-          }))
-          .catch(error => console.log('error', error))
-    },
-
-    loadCourses () {
-      this.courses = [];
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      }
-      fetch(baseUrl + '/course', requestOptions)
-          .then(response => response.json())
-          .then(result => result.forEach(course => {
-            this.courses.push(course)
-          }))
-          .catch(error => console.log('error', error))
-    },
-
-    async loadGrades() {
-      this.studentGrades = [];
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
+    async loadStudents () {
       try {
-        await new Promise((resolve) => {
-          setTimeout(resolve, 800);
-        });
-
-        const response = await fetch(endpointUrl, requestOptions);
-        const result = await response.json();
-        this.studentGrades = result;
+        const response = await fetch(baseUrl + '/students');
+        this.students = await response.json();
       } catch (error) {
-        console.log('error', error);
+        console.log('Error:', error);
       }
     },
 
-    loadGradesWhenDelete() {
-      this.studentGrades = [];
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
+    async loadCourses () {
       try {
-        // Künstliche Verzögerung von 0,4 Sekunden einführen
-        setTimeout(async () => {
-          const response = await fetch(endpointUrl, requestOptions);
-          const result = await response.json();
-          this.studentGrades = result;
-        }, 400);
+        const response = await fetch(baseUrl + '/course');
+        this.courses = await response.json();
       } catch (error) {
-        console.log('error', error);
+        console.log('Error:', error);
+      }
+    },
+
+    async loadGrades () {
+      try {
+        const response = await fetch(endpointUrl);
+        this.studentGrades = await response.json();
+      } catch (error) {
+        console.log('Error:', error);
       }
     },
 
@@ -178,25 +140,20 @@ export default {
       this.student_idField = '';
       this.course_idField = '';
       this.gradeField = '';
-      this.filterCritStudent = '';
-      this.filterCritCourse = '';
     },
 
     async save() {
       const student = this.students.find(s => s.id == this.student_idField);
       const course = this.courses.find(c => c.id == this.course_idField);
-
       if (student === undefined || course === undefined) {
         console.log('Student or course not found');
         return;
       }
-
       const data = {
         student_id: student,
         course_id: course,
         grade: this.gradeField
       }
-
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -204,56 +161,58 @@ export default {
         },
         body: JSON.stringify(data)
        }
-
-    // const result = await fetch(endpoint, requestOptions).then(r=>r.json());
-
-      fetch(endpointUrl, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data)
-          })
-          .catch(error => console.log('error', error))
-   //   location.reload();
-      this.resetFields();
-      await this.loadGrades();
+      try {
+        await this.performDatabaseOperation(endpointUrl, requestOptions);
+        this.resetFields();
+        await this.loadGrades();
+      } catch (error) {
+        console.log('Error:', error);
+      }
     },
 
-
-
     async deleteGrade(student_id, course_id) {
-
       const requestOptions = {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         }
       }
+      try {
+        const deleteUrl = `${endpointUrl}/delete/${student_id}/${course_id}`;
+        await this.performDatabaseOperation(deleteUrl, requestOptions);
+      } catch (error) {
+        console.log('Error:', error);
+      }
+      await this.loadGrades();
+    },
 
-      fetch(endpointUrl + '/delete/' + student_id + '/' + course_id, requestOptions)
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch(error => console.log('Error:', error));
-      await this.loadGradesWhenDelete();
+    async performDatabaseOperation(url, requestOptions) {
+      return new Promise((resolve, reject) => {
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              resolve();
+            })
+            .catch(error => {
+              console.log('Error:', error);
+              reject(error);
+            });
+      });
     },
 
     async setup () {
       if (this.$root.authenticated) {
         this.claims = await this.$auth.getUser()
-        // this.accessToken = await this.$auth.getAccessToken()
       }
     }
   },
 
   async created () {
     await this.setup()
-    this.loadGrades();
-    this.loadStudents(); // Fetch students data
-    this.loadCourses(); // Fetch courses data
-  },
-
-  mounted () {
+    await this.loadGrades();
+    await this.loadStudents();
+    await this.loadCourses();
   },
 
   updated() {
@@ -282,7 +241,7 @@ button.styled-button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0px;
+  padding: 10px 0;
   margin-bottom: 20px;
 }
 
@@ -365,9 +324,6 @@ button.styled-button {
 .btn:hover {
   background-color: #063822;
 }
-.students-table-container {
-  float: right;
-  margin-left: 20px;
-}
+
 </style>
 
