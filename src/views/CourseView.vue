@@ -92,10 +92,10 @@ export default {
       try {
         const deleteUrl = `${endpointUrl}/delete/${id}`;
         await this.performDatabaseOperation(deleteUrl, requestOptions);
-        await this.loadCourses();
       } catch (error) {
         console.log('Error:', error);
       }
+      await this.loadCourses();
     },
 
     async performDatabaseOperation(url, requestOptions) {

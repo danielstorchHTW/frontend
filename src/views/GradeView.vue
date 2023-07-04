@@ -180,10 +180,10 @@ export default {
       try {
         const deleteUrl = `${endpointUrl}/delete/${student_id}/${course_id}`;
         await this.performDatabaseOperation(deleteUrl, requestOptions);
-        await this.loadGrades();
       } catch (error) {
         console.log('Error:', error);
       }
+      await this.loadGrades();
     },
 
     async performDatabaseOperation(url, requestOptions) {
