@@ -117,11 +117,22 @@ export default {
       };
       try {
         const deleteUrl = `${endpointUrl}/delete/${id}`;
-        await this.performDatabaseOperation(deleteUrl, requestOptions);
+        const response = await this.performDatabaseOperation(deleteUrl, requestOptions);
+        if (response.status === 200) {
+          const responseData = await response.json();
+          if (responseData.success) {
+            await this.loadStudents();
+          } else {
+            console.log('Delete operation failed:', responseData.message);
+            this.showPopup('Delete failed. Student is tied to a grade.');
+          }
+        } else {
+          console.log('Delete operation failed with status:', response.status);
+          this.showPopup('Delete failed. Student is tied to a grade.');
+        }
       } catch (error) {
-        console.log('Error:', error);
+        console.log('Error:', error.message);
       }
-      await this.loadStudents();
     },
 
     async performDatabaseOperation(url, requestOptions) {
@@ -130,7 +141,7 @@ export default {
             .then(response => response.json())
             .then(data => {
               console.log('Success:', data);
-              resolve();
+              resolve(data);
             })
             .catch(error => {
               console.log('Error:', error);
