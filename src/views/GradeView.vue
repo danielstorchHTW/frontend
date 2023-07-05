@@ -117,6 +117,10 @@ export default {
       try {
         const response = await fetch(baseUrl + '/students');
         this.students = await response.json();
+        this.students.forEach(student => {
+          student.id = parseInt(student.id);
+        });
+        this.students.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.log('Error:', error);
       }
@@ -126,15 +130,26 @@ export default {
       try {
         const response = await fetch(baseUrl + '/course');
         this.courses = await response.json();
+        this.courses.forEach(course => {
+          course.id = parseInt(course.id);
+        });
+        this.courses.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.log('Error:', error);
       }
     },
 
-    async loadGrades () {
+    async loadGrades() {
       try {
         const response = await fetch(endpointUrl);
         this.studentGrades = await response.json();
+        this.studentGrades.sort((a, b) => {
+          if (a.student_id.id !== b.student_id.id) {
+            return a.student_id.id - b.student_id.id;
+          } else {
+            return a.course_id.id - b.course_id.id;
+          }
+        });
       } catch (error) {
         console.log('Error:', error);
       }

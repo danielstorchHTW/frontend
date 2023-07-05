@@ -87,7 +87,7 @@ export default {
         this.showPopup('Saving failed. Both fields must be filled.');
         return;
       }
-      if (typeof data.matrikelnrField === 'string') {
+      if (isNaN(this.matrikelnrField)) {
         this.showPopup('Saving failed. Invalid datatype.');
         return;
       }
@@ -143,10 +143,15 @@ export default {
       try {
         const response = await fetch(endpointUrl);
         this.students = await response.json();
+        this.students.forEach(student => {
+          student.id = parseInt(student.id);
+        });
+        this.students.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.log('Error:', error);
       }
     },
+
 
     async setup () {
       if (this.$root.authenticated) {

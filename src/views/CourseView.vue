@@ -133,6 +133,10 @@ export default {
       try {
         const response = await fetch(endpointUrl);
         this.courses = await response.json();
+        this.courses.forEach(course => {
+          course.id = parseInt(course.id);
+        });
+        this.courses.sort((a, b) => a.id - b.id);
       } catch (error) {
         console.log('Error:', error);
       }
