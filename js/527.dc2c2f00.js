@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkfrontend"]=self["webpackChunkfrontend"]||[]).push([[527],{6143:(e,n,t)=>{t.r(n),t.d(n,{default:()=>f});var r=t(6252),a=t(3577),o=(0,r._)("p",{style:{"font-size":"50px",color:"#28865b"}},"Welcome to our Student Management System!",-1),d=[o];function s(e,n){return(0,r.wg)(),(0,r.iD)("div",{class:(0,a.C_)(["app-container",{"dark-mode":e.darkMode}]),id:"app"},d,2)}var c=t(3744);const p={},u=(0,c.Z)(p,[["render",s]]),f=u}}]);
+//# sourceMappingURL=527.dc2c2f00.js.map
