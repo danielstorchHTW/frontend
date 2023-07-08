@@ -121,6 +121,7 @@ export default {
         if (response.status === 200) {
           const responseData = await response.json();
           if (responseData.success) {
+            console.log("es geht")
             await this.loadStudents();
           } else {
             console.log('Delete operation failed:', responseData.message);
@@ -132,6 +133,7 @@ export default {
         }
       } catch (error) {
         console.log('Error:', error.message);
+        await this.loadStudents();
       }
     },
 
